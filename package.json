@@ -2,9 +2,12 @@
   "name": "nodejs-hw-mongodb",
   "version": "1.0.0",
   "type": "module",
+  "main": "src/index.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon src/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "lint": "eslint src/**/*.js"
   },
   "repository": {
     "type": "git",
