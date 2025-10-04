@@ -10,8 +10,33 @@ import {
 } from "../services/contacts.js";
 
 export async function getContactsController(req, res) {
-  const contacts = await getAllContacts();
-  res.json({ status: 200, message: "Successfully found contacts!", data: contacts });
+  const {
+    page = 1,
+    perPage = 10,
+    sortBy = "name",
+    sortOrder = "asc",
+    type,
+    isFavourite
+  } = req.query;
+
+  const parsedPage = Number(page) || 1;
+  const parsedPerPage = Number(perPage) || 10;
+  const parsedIsFavourite = typeof isFavourite !== "undefined" ? isFavourite === "true" : undefined;
+
+  const result = await getAllContacts({
+    page: parsedPage,
+    perPage: parsedPerPage,
+    sortBy,
+    sortOrder,
+    type,
+    isFavourite: parsedIsFavourite
+  });
+
+  res.json({
+    status: 200,
+    message: "Successfully found contacts!",
+    data: result
+  });
 }
 
 export async function getContactByIdController(req, res) {
@@ -54,4 +79,3 @@ export async function deleteContactController(req, res) {
 
   res.status(204).send();
 }
-
