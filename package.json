@@ -22,10 +22,13 @@
   "homepage": "https://github.com/Gorodeikin/nodejs-hw-mongodb#readme",
   "description": "",
   "dependencies": {
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.1.0",
     "joi": "^18.0.1",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.3",
     "pino": "^9.12.0",
     "pino-http": "^10.5.0"

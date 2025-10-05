@@ -1,5 +1,3 @@
-//src/db/initMongoConnection.js
-
 import mongoose from "mongoose";
 
 export async function initMongoConnection() {
@@ -18,7 +16,7 @@ export async function initMongoConnection() {
           const fullUrl = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@${MONGODB_URL}/${MONGODB_DB}?retryWrites=true&w=majority`;
 
         await mongoose.connect(fullUrl);
-        
+
         console.log("Mongo connection successfully established!");
     } catch (error) {
         console.error("Mongo connection error:", error.message);
