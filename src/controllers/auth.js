@@ -1,10 +1,21 @@
+//src/controllers/auth.js
+
 import createHttpError from "http-errors";
+import jwt from "jsonwebtoken";
+import { User } from "../models/user.js";
+import { Session } from "../models/session.js";
+import { sendMail } from "../utils/mailer.js";
 import {
   registerUser,
   loginUser,
   refreshSession,
-  logoutSession
+  logoutSession,
 } from "../services/auth.js";
+
+const { JWT_SECRET, APP_DOMAIN } = process.env;
+if (!JWT_SECRET) {
+  throw new Error("JWT_SECRET is not defined in environment variables");
+}
 
 export async function registerController(req, res) {
   const { name, email, password } = req.body;
@@ -25,7 +36,6 @@ export async function registerController(req, res) {
 
 export async function loginController(req, res) {
   const { email, password } = req.body;
-
   const { accessToken, refreshToken, sessionId } = await loginUser({ email, password });
 
   const cookieOptions = {
@@ -84,4 +94,57 @@ export async function logoutController(req, res) {
   res.clearCookie("sessionId");
 
   res.status(204).send();
+}
+
+export async function sendResetEmailController(req, res) {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) throw createHttpError(404, "User not found!");
+
+  const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "5m" });
+
+  const frontendDomain = APP_DOMAIN || "http://localhost:3000/auth";
+  const resetLink = `${frontendDomain.replace(/\/$/, "")}/reset-password?token=${token}`;
+
+  const html = `<p>Hello ${user.name || "user"},</p>
+<p>Click <a href="${resetLink}">here</a> to reset your password. This link will expire in 5 minutes.</p>`;
+
+await sendMail({
+  to: email,
+  subject: "Reset your password",
+  html,
+  text: `Reset your password: ${resetLink}`,
+});
+
+  res.json({
+    status: 200,
+    message: "Reset password email has been successfully sent.",
+    data: {},
+  });
+}
+
+export async function resetPasswordController(req, res) {
+  const { token, password } = req.body;
+
+  const payload = jwt.verify(token, JWT_SECRET);
+  const { email } = payload;
+  if (!email) throw createHttpError(401, "Token is expired or invalid.");
+
+  const user = await User.findOne({ email });
+  if (!user) throw createHttpError(404, "User not found!");
+
+  const bcrypt = await import("bcrypt");
+  const hashed = await bcrypt.hash(password, 10);
+
+  user.password = hashed;
+  await user.save();
+
+  await Session.deleteMany({ userId: user._id });
+
+  res.json({
+    status: 200,
+    message: "Password has been successfully reset.",
+    data: {},
+  });
 }

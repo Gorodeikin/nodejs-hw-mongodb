@@ -1,3 +1,5 @@
+// src/controllers/contacts.js
+
 import createHttpError from "http-errors";
 import {
   getAllContacts,
@@ -6,7 +8,9 @@ import {
   updateContact,
   deleteContact,
 } from "../services/contacts.js";
+import { uploadBufferToCloudinary } from "../utils/cloudinary.js";
 
+// GET /contacts
 export async function getContactsController(req, res) {
   const {
     page = 1,
@@ -14,12 +18,13 @@ export async function getContactsController(req, res) {
     sortBy = "name",
     sortOrder = "asc",
     type,
-    isFavourite
+    isFavourite,
   } = req.query;
 
   const parsedPage = Number(page) || 1;
   const parsedPerPage = Number(perPage) || 10;
-  const parsedIsFavourite = typeof isFavourite !== "undefined" ? isFavourite === "true" : undefined;
+  const parsedIsFavourite =
+    typeof isFavourite !== "undefined" ? isFavourite === "true" : undefined;
   const userId = req.user._id;
 
   const result = await getAllContacts({
@@ -29,19 +34,21 @@ export async function getContactsController(req, res) {
     sortOrder,
     type,
     isFavourite: parsedIsFavourite,
-    userId
+    userId,
   });
 
   res.json({
     status: 200,
     message: "Successfully found contacts!",
-    data: result
+    data: result,
   });
 }
 
+// GET /contacts/:contactId
 export async function getContactByIdController(req, res) {
   const { contactId } = req.params;
   const userId = req.user._id;
+
   const contact = await getContactById(contactId, userId);
   if (!contact) throw createHttpError(404, "Contact not found");
 
@@ -52,9 +59,25 @@ export async function getContactByIdController(req, res) {
   });
 }
 
+
+// POST /contacts
 export async function createContactController(req, res) {
   const userId = req.user._id;
   const data = { ...req.body, userId };
+
+  if (req.file) {
+    try {
+      const result = await uploadBufferToCloudinary(req.file.buffer, "contacts");
+      data.photo = result.secure_url;
+    } catch (err) {
+      console.error("Cloudinary upload error:", err);
+      throw createHttpError(
+        500,
+        "Failed to upload photo, please try again later."
+      );
+    }
+  }
+
   const contact = await createContact(data);
   res.status(201).json({
     status: 201,
@@ -63,10 +86,26 @@ export async function createContactController(req, res) {
   });
 }
 
+// PATCH /contacts/:contactId
 export async function updateContactController(req, res) {
   const { contactId } = req.params;
   const userId = req.user._id;
-  const updated = await updateContact(contactId, req.body, userId);
+  const updateData = { ...req.body };
+
+  if (req.file) {
+    try {
+      const result = await uploadBufferToCloudinary(req.file.buffer, "contacts");
+      updateData.photo = result.secure_url;
+    } catch (err) {
+      console.error("Cloudinary upload error:", err);
+      throw createHttpError(
+        500,
+        "Failed to upload photo, please try again later."
+      );
+    }
+  }
+
+  const updated = await updateContact(contactId, updateData, userId);
   if (!updated) throw createHttpError(404, "Contact not found");
 
   res.json({
@@ -76,9 +115,11 @@ export async function updateContactController(req, res) {
   });
 }
 
+// DELETE /contacts/:contactId
 export async function deleteContactController(req, res) {
   const { contactId } = req.params;
   const userId = req.user._id;
+
   const deleted = await deleteContact(contactId, userId);
   if (!deleted) throw createHttpError(404, "Contact not found");
 
