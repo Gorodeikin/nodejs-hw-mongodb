@@ -1,5 +1,3 @@
-//src/middlewares/isValidId.js
-
 import mongoose from "mongoose";
 import createHttpError from "http-errors";
 

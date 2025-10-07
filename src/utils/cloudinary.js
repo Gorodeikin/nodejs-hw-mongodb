@@ -1,5 +1,3 @@
-// src/utils/cloudinary.js
-
 import cloudinary from "cloudinary";
 
 const {

@@ -1,5 +1,3 @@
-//src/utils/ctrlWrapper.js
-
 export function ctrlWrapper(ctrl) {
   return async (req, res, next) => {
     try {
