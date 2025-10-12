@@ -1,3 +1,5 @@
+//src/middlewares/authenticate.js
+
 import jwt from "jsonwebtoken";
 import createHttpError from "http-errors";
 import { Session } from "../models/session.js";

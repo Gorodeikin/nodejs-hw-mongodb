@@ -1,3 +1,5 @@
+//src/utils/mailer.js
+
 import nodemailer from "nodemailer";
 import createHttpError from "http-errors";
 
