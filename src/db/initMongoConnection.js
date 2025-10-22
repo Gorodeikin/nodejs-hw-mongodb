@@ -1,5 +1,3 @@
-//src/db/initMongoconnection.js
-
 import mongoose from "mongoose";
 
 export async function initMongoConnection() {

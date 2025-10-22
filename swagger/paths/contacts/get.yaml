@@ -1,0 +1,82 @@
+tags:
+  - Contacts
+summary: Get all contacts
+operationId: getContacts
+description: Retrieve a list of all user contacts with optional filtering and pagination.
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: page
+    required: false
+    schema:
+      type: integer
+      example: 1
+    description: The page number for pagination
+  - in: query
+    name: perPage
+    required: false
+    schema:
+      type: integer
+      example: 10
+    description: Number of contacts per page
+  - in: query
+    name: name
+    required: false
+    schema:
+      type: string
+      example: Dave
+    description: Filter contacts by name
+  - in: query
+    name: email
+    required: false
+    schema:
+      type: string
+      example: dave@gmail.com
+    description: Filter contacts by email
+  - in: query
+    name: isFavourite
+    required: false
+    schema:
+      type: boolean
+      example: true
+    description: Filter contacts by favourite status
+
+responses:
+  '200':
+    description: Successfully retrieved contacts
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully got contacts
+            data:
+              type: array
+              items:
+                $ref: ../../components/schemas/contact.yaml
+  '404':
+    description: Contacts not found
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: Contacts not found

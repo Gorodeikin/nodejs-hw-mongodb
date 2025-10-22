@@ -1,5 +1,3 @@
-//src/services/contacts.js
-
 import { Contact } from "../models/contact.js";
 
 export async function getAllContacts({ page = 1, perPage = 10, sortBy = "name", sortOrder = "asc", type, isFavourite, userId }) {
@@ -45,4 +43,3 @@ export async function updateContact(id, data, userId) {
 export async function deleteContact(id, userId) {
   return Contact.findOneAndDelete({ _id: id, userId });
 }
-

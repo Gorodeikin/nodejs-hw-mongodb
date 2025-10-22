@@ -1,0 +1,54 @@
+type: object
+required:
+  - _id
+  - name
+  - phoneNumber
+  - email
+  - contactType
+  - userId
+  - createdAt
+  - updatedAt
+properties:
+  _id:
+    type: string
+    description: Contact id
+    example: 68efd41636a23320bb4ef586
+  name:
+    type: string
+    description: Contact name
+    example: John Deere
+  phoneNumber:
+    type: string
+    description: Contact phone number
+    example: +038284657512
+  email:
+    type: string
+    description: Contact email
+    example: example@gmail.com
+  contactType:
+    type: string
+    description: Contact contactType
+    enum: ['work', 'home', 'personal']
+    example: personal
+  isFavourite:
+    type: boolean
+    description: Is favourite contact
+    default: false
+    example: true
+  photo:
+    type: string
+    description: Contact photo
+    default: null
+    example: https://i.ibb.co/spQWw0fq/Bitmap-image-3.jpg
+  userId:
+    type: string
+    description: Contact owner id
+    example: 68efd834f1781f960b1e7a6c
+  createdAt:
+    type: string
+    format: date-time
+    example: 2025-10-08T18:21:10.157+00:00
+  updatedAt:
+    type: string
+    format: date-time
+    example: 2025-10-08T18:21:10.157+00:00

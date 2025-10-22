@@ -1,5 +1,3 @@
-//src/services/auth.js
-
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import createHttpError from "http-errors";
@@ -95,4 +93,3 @@ export async function logoutSession({ refreshToken, sessionId }) {
   if (s.refreshToken !== refreshToken) return;
   await Session.deleteOne({ _id: sessionId });
 }
-

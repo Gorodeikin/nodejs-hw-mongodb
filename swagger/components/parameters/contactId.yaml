@@ -1,0 +1,6 @@
+name: contactId
+in: path
+description: ID контакта
+required: true
+schema:
+  type: string

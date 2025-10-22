@@ -1,5 +1,3 @@
-//src/controllers/auth.js
-
 import createHttpError from "http-errors";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.js";
