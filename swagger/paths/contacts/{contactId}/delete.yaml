@@ -39,6 +39,7 @@ responses:
           required:
             - status
             - message
+            - data
           properties:
             status:
               type: integer
@@ -46,3 +47,6 @@ responses:
             message:
               type: string
               example: Contact not found
+            data:
+              type: [object, "null"]
+              example: null
