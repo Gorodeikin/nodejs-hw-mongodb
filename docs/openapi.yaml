@@ -10,8 +10,6 @@ tags:
   - name: Contacts
     description: Operation with contacts
 servers:
-  - url: http://localhost:3000
-    description: Local server
   - url: https://nodejs-hw-mongodb-ibwe.onrender.com
     description: Production server
 paths:
