@@ -10,7 +10,7 @@
     }
   },
   "servers": [
-    { "url": "https://nodejs-hw-mongodb-rnrd.onrender.com" }
+    { "url": "https://nodejs-hw-mongodb-ibwe.onrender.com" }
   ],
   "tags": [
     { "name": "Contacts", "description": "Operations with contacts" }
