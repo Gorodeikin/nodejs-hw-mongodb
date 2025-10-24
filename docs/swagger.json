@@ -195,7 +195,21 @@
         },
         "responses": {
           "200": { "description": "Contact updated successfully", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/contact" } } } },
-          "404": { "description": "Contact not found" }
+          "404": {
+            "description": "Contacts not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["status","message"],
+                  "properties": {
+                    "status": { "type": "integer", "example": 404 },
+                    "message": { "type": "string", "example": "Contacts not found" }
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "delete": {
@@ -208,7 +222,21 @@
         ],
         "responses": {
           "200": { "description": "Contact deleted successfully" },
-          "404": { "description": "Contact not found" }
+          "404": {
+            "description": "Contacts not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["status","message"],
+                  "properties": {
+                    "status": { "type": "integer", "example": 404 },
+                    "message": { "type": "string", "example": "Contacts not found" }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
